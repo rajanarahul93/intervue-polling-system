@@ -7,28 +7,33 @@ require("dotenv").config();
 const app = express();
 const server = http.createServer(app);
 
-// Socket.io with CORS configuration for development
-// Update CORS configuration
+// Socket.io with CORS configuration - EXACT FIX
 const io = new Server(server, {
   cors: {
     origin: [
-      "http://localhost:3000", 
+      "http://localhost:3000",
+      "https://intervue-polling-system-sigma.vercel.app", // Your actual Vercel URL
       "https://*.vercel.app", // Allow all Vercel subdomains
-      "https://intervue-polling-system.vercel.app" // Your specific domain
     ],
     methods: ["GET", "POST"],
-    credentials: true
-  }
+    credentials: true,
+    allowedHeaders: ["*"],
+  },
 });
 
-app.use(cors({
-  origin: [
-    "http://localhost:3000",
-    "https://*.vercel.app",
-    "https://intervue-polling-system.vercel.app"
-  ],
-  credentials: true
-}));
+// Express CORS middleware
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "https://intervue-polling-system-sigma.vercel.app", // Your actual Vercel URL
+      "https://*.vercel.app",
+    ],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["*"],
+  })
+);
 
 app.use(express.json());
 
